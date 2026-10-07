@@ -19,23 +19,19 @@ Decidi fazer a arquitetura tradicional (Controller -> Service -> Repositories ->
 - [x] CRUD de itens
 - [x] CRUD de usuários
 - [x] Criptografia de senhas
-- [ ] Autenticação e Autorização(em andamento)
+- [ ] Autenticação com JWT
+- [ ] Autorização baseada em roles
 - [ ] Sistema de carrinho
 - [ ] Testes Unitários
 - [ ] Testes de Integração
 
 ## 🛠 Tecnologias
 - Java 17
-- Spring Boot 4.0.1
+- Spring Boot 4.1.0
 - PostgreSQL
 - Docker
 - SonarQube
 - Swagger
-
-## 🕰️ Timeline
-### Julho 2026
-- CRUD de Usuários
-- CRUD de Itens
 
 ## 📒 Requisitos Mínimos
 
