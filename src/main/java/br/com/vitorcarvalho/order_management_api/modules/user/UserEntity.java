@@ -21,6 +21,9 @@ public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
+    @Column(nullable = false)
+    private String role = "USER";
     
     @Column(nullable = false)
     private String name;
