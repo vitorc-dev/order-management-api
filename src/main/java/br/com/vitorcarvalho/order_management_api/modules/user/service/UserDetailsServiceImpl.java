@@ -2,6 +2,7 @@ package br.com.vitorcarvalho.order_management_api.modules.user.service;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import br.com.vitorcarvalho.order_management_api.modules.exceptions.UserNotFoundException;
@@ -21,7 +22,7 @@ public class UserDetailsServiceImpl implements UserDetailsService{
     @Override
     public UserDetails loadUserByUsername(String email) throws UserNotFoundException{
         UserEntity user = this.userRepository.findByEmail(email).orElseThrow(
-            () -> new UserNotFoundException()
+            () -> new UsernameNotFoundException("User not found.")
         );
 
         return new UserPrincipal(user);
