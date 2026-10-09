@@ -3,6 +3,7 @@ package br.com.vitorcarvalho.order_management_api.modules.user;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -23,6 +24,7 @@ public class UserEntity {
     private UUID id;
 
     @Column(nullable = false)
+    @ColumnDefault("'USER'")
     private String role = "USER";
     
     @Column(nullable = false)
@@ -36,6 +38,7 @@ public class UserEntity {
     private String password;
 
     @Column(nullable = false)
+    @ColumnDefault("true")
     private boolean active = true;
     
     @CreationTimestamp

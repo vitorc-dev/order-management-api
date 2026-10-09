@@ -39,10 +39,9 @@ public class SecurityConfig {
             new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
         .authorizeHttpRequests(auth -> auth
                 .requestMatchers(PERMIT_ALL_LIST).permitAll()
-                .requestMatchers("/users").permitAll()
-                .requestMatchers("/items").permitAll()
                 .requestMatchers(HttpMethod.POST, "/users", "/users/").permitAll()
                 .requestMatchers(HttpMethod.GET, "/items", "/items/**").permitAll()
+                .requestMatchers("/auth/login").permitAll()
                 .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
