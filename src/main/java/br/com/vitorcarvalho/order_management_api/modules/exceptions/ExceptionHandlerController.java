@@ -3,9 +3,7 @@ package br.com.vitorcarvalho.order_management_api.modules.exceptions;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.catalina.connector.Response;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -40,5 +38,11 @@ public class ExceptionHandlerController {
     @ExceptionHandler(InvalidCredentialException.class)
     public ResponseEntity<String> handleInvalidCredentialException(InvalidCredentialException ex){
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(EmailAlreadyExistsException.class)
+    public ResponseEntity<ErrorMessageDTO> handleEmailAlreadyExistsException(EmailAlreadyExistsException ex){
+        ErrorMessageDTO error = new ErrorMessageDTO(ex.getMessage(), "email");  
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
     }
 }

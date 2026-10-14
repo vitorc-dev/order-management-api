@@ -42,6 +42,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/users", "/users/").permitAll()
                 .requestMatchers(HttpMethod.GET, "/items", "/items/**").permitAll()
                 .requestMatchers("/auth/login").permitAll()
+                .requestMatchers("/error").permitAll()
                 .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 

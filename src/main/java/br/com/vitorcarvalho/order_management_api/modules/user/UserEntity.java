@@ -31,7 +31,7 @@ public class UserEntity {
     private String name;
 
     @Email
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)
