@@ -1,4 +1,4 @@
-package br.com.vitorcarvalho.order_management_api.modules.items.useCases;
+package br.com.vitorcarvalho.order_management_api.modules.items.service;
 
 import java.util.List;
 import java.util.UUID;
@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.vitorcarvalho.order_management_api.modules.exceptions.ItemNotFoundException;
 import br.com.vitorcarvalho.order_management_api.modules.items.ItemEntity;
+import br.com.vitorcarvalho.order_management_api.modules.items.dto.CreateItemRequest;
 import br.com.vitorcarvalho.order_management_api.modules.items.dto.PatchItemRequest;
 import br.com.vitorcarvalho.order_management_api.modules.items.dto.UpdateItemRequest;
 import br.com.vitorcarvalho.order_management_api.modules.items.mappers.ItemMapper;
@@ -34,6 +35,10 @@ public class ItemUseCase {
             return this.itemRepository.findByCategoryContainingIgnoreCase(category.toUpperCase());
         }
         return this.itemRepository.findAll();
+    }
+    public ItemEntity create(CreateItemRequest createdItem){
+        ItemEntity item = this.itemMapper.toEntity(createdItem);
+        return this.itemRepository.save(item);
     }
 
     public ItemEntity patch(UUID id, PatchItemRequest patchedItem){
