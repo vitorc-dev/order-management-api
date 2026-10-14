@@ -67,6 +67,13 @@ public class UserService {
 
     public UserResponse patch(UUID id, PatchUserRequest dto) {
         UserEntity user = this.findActiveUserOrThrow(id);
+
+        if (dto.getEmail() != null
+                && !dto.getEmail().equals(user.getEmail())
+                && this.userRepository.existsByEmail(dto.getEmail())) {
+            throw new EmailAlreadyExistsException();
+        }
+
         this.userMapper.patchUserFromDTO(dto, user);
 
         if (dto.getPassword() != null) {
