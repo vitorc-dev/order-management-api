@@ -2,8 +2,8 @@ package br.com.vitorcarvalho.order_management_api.modules.user.assistant;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
-import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -50,5 +50,9 @@ public class UserPrincipal implements UserDetails{
     @Override
     public boolean isEnabled(){
         return this.user.isActive();
+    }
+
+    public UUID getId(){
+        return this.user.getId();
     }
 }
