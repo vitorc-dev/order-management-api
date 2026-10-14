@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -41,6 +42,7 @@ public class ItemController {
     }
 
     @PostMapping("/")
+    @PreAuthorize("hasRole('ADMIN')")
     @ApiResponses({
         @ApiResponse(responseCode = "201", description = "The item was created with success!"),
         @ApiResponse(responseCode = "400", description = "Please verify the item's attributes.")
@@ -62,6 +64,7 @@ public class ItemController {
     }
     
     @PatchMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Patch", description = "This function is responsible for updating partially an item by ID.")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "The item was patched with success!"),
@@ -73,6 +76,7 @@ public class ItemController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Update", description = "This funcion is responsible for updating an item by ID.")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "The item was updated with success!"),
@@ -84,6 +88,7 @@ public class ItemController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Delete", description = "This function is responsible for deleting an item by ID.")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "The item was deleted with success!"),
