@@ -28,6 +28,7 @@ public class UserEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+    @ColumnDefault("'USER'")
     private Role role = Role.USER;
     
     @Column(nullable = false)
