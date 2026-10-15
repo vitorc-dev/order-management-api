@@ -2,53 +2,57 @@ package br.com.vitorcarvalho.order_management_api.modules.user.assistant;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
-import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import br.com.vitorcarvalho.order_management_api.modules.user.UserEntity;
 
-public class UserPrincipal implements UserDetails{
+public class UserPrincipal implements UserDetails {
     private final UserEntity user;
 
-    public UserPrincipal(UserEntity user){
+    public UserPrincipal(UserEntity user) {
         this.user = user;
     }
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities(){
+    public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_" + this.user.getRole()));
     }
 
     @Override
-    public String getPassword(){
+    public String getPassword() {
         return this.user.getPassword();
     }
 
     @Override
-    public String getUsername(){
+    public String getUsername() {
         return this.user.getEmail();
     }
 
     @Override
-    public boolean isAccountNonExpired(){
+    public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
-    public boolean isAccountNonLocked(){
+    public boolean isAccountNonLocked() {
         return true;
     }
 
     @Override
-    public boolean isCredentialsNonExpired(){
+    public boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
-    public boolean isEnabled(){
+    public boolean isEnabled() {
         return this.user.isActive();
+    }
+
+    public UUID getId() {
+        return this.user.getId();
     }
 }

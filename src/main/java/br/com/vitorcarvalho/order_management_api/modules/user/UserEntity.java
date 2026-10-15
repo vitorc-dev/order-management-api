@@ -9,6 +9,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -18,14 +20,16 @@ import lombok.Data;
 @Data
 @Entity(name = "users")
 public class UserEntity {
+    public enum Role { USER, ADMIN }
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     @ColumnDefault("'USER'")
-    private String role = "USER";
+    private Role role = Role.USER;
     
     @Column(nullable = false)
     private String name;
