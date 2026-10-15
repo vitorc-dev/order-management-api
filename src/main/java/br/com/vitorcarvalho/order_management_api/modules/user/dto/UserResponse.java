@@ -3,8 +3,7 @@ package br.com.vitorcarvalho.order_management_api.modules.user.dto;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import org.hibernate.type.descriptor.java.LocalDateJavaType;
-
+import br.com.vitorcarvalho.order_management_api.modules.user.UserEntity.Role;
 import lombok.Data;
 
 @Data
@@ -15,4 +14,5 @@ public class UserResponse {
     private boolean active;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private Role role;
 }
