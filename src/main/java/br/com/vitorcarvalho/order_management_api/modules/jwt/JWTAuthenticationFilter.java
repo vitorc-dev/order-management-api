@@ -10,6 +10,8 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import br.com.vitorcarvalho.order_management_api.modules.exceptions.UserNotFoundException;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -44,10 +46,12 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter{
         }
 
         String token = authHeader.substring(7);
-        String email = this.jwtService.extractEmail(token);
 
-        if(email != null && SecurityContextHolder.getContext().getAuthentication() == null){
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(email);
+        try {
+            String email = this.jwtService.extractEmail(token);
+
+            if(email != null && SecurityContextHolder.getContext().getAuthentication() == null){
+                UserDetails userDetails = this.userDetailsService.loadUserByUsername(email);
 
             if(this.jwtService.isTokenValid(token, email)){
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
@@ -58,7 +62,9 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter{
 
             }
         }
-
+        } catch (JwtException | UserNotFoundException e) {
+            //Não autentica ninguém
+        }
         filterChain.doFilter(request, response);
     }
 
