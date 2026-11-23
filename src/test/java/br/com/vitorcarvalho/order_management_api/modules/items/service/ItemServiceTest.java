@@ -15,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import br.com.vitorcarvalho.order_management_api.modules.exceptions.ItemNotFoundException;
 import br.com.vitorcarvalho.order_management_api.modules.items.ItemEntity;
+import br.com.vitorcarvalho.order_management_api.modules.items.dto.CreateItemRequest;
 import br.com.vitorcarvalho.order_management_api.modules.items.dto.PatchItemRequest;
 import br.com.vitorcarvalho.order_management_api.modules.items.dto.UpdateItemRequest;
 import br.com.vitorcarvalho.order_management_api.modules.items.mappers.ItemMapper;
@@ -108,5 +109,21 @@ public class ItemServiceTest {
         assertThrows(ItemNotFoundException.class, () -> itemService.update(id, dto));
         verify(itemMapper, never()).updateEntityFromDTO(any(), any());
         verify(itemRepository, never()).save(any());
+    }
+
+    //Create
+    @Test
+    void shouldCreateItem(){
+        CreateItemRequest dto = new CreateItemRequest();
+        ItemEntity item = new ItemEntity();
+
+        when(itemMapper.toEntity(dto)).thenReturn(item);
+        when(itemRepository.save(item)).thenReturn(item);
+
+        ItemEntity result = itemService.create(dto);
+
+        assertEquals(item, result);
+        verify(itemMapper).toEntity(dto);
+        verify(itemRepository).save(item);
     }
 }
