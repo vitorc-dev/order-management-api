@@ -13,4 +13,5 @@ public interface ItemRepository extends JpaRepository<ItemEntity, UUID>{
     List<ItemEntity> findByNameContainingIgnoreCase(String name);
     List<ItemEntity> findByCategoryContainingIgnoreCase(String category);
     Optional<ItemEntity> findById(UUID id);
+    
 }
