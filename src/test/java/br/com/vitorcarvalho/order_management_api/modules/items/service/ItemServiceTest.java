@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -125,5 +126,58 @@ public class ItemServiceTest {
         assertEquals(item, result);
         verify(itemMapper).toEntity(dto);
         verify(itemRepository).save(item);
+    }
+
+    //findByFilter
+    @Test
+    void shouldFilterByNameWhenNameIsProvided(){
+        List<ItemEntity> items = List.of(new ItemEntity());
+
+        when(itemRepository.findByNameContainingIgnoreCase("HOBBIT")).thenReturn(items);
+
+        List<ItemEntity> result = itemService.findByFilter("hobbit", null);
+
+        assertEquals(items, result);
+        verify(itemRepository).findByNameContainingIgnoreCase("HOBBIT");
+    }
+
+    @Test
+    void shouldFilterByCategoryWhenOnlyCategoryIsProvided(){
+        List<ItemEntity> items = List.of(new ItemEntity());
+
+        when(itemRepository.findByCategoryContainingIgnoreCase("LIVROS")).thenReturn(items);
+
+        List<ItemEntity> result = itemService.findByFilter(null, "livros");
+
+        assertEquals(items, result);
+        verify(itemRepository).findByCategoryContainingIgnoreCase("LIVROS");
+        verify(itemRepository, never()).findByNameContainingIgnoreCase(any());
+    }
+
+    @Test
+    void shouldReturnAllItemsWhenNoFilterIsProvided(){
+        List<ItemEntity> items = List.of(new ItemEntity());
+
+        when(itemRepository.findAll()).thenReturn(items);
+
+        List<ItemEntity> result = itemService.findByFilter(null, null);
+
+        assertEquals(items, result);
+        verify(itemRepository).findAll();
+        verify(itemRepository, never()).findByNameContainingIgnoreCase(any());
+        verify(itemRepository, never()).findByCategoryContainingIgnoreCase(any());
+    }
+
+    @Test
+    void shouldIgnoreCategoryWhenNameIsProvided(){
+        List<ItemEntity> items = List.of(new ItemEntity());
+
+        when(itemRepository.findByNameContainingIgnoreCase("HOBBIT")).thenReturn(items);
+
+        List<ItemEntity> result = itemService.findByFilter("hobbit", "livros");
+
+        assertEquals(items, result);
+        verify(itemRepository, never()).findByCategoryContainingIgnoreCase(any());
+        verify(itemRepository).findByNameContainingIgnoreCase("HOBBIT");
     }
 }
