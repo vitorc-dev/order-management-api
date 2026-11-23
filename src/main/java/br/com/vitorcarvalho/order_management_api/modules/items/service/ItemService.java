@@ -14,55 +14,53 @@ import br.com.vitorcarvalho.order_management_api.modules.items.mappers.ItemMappe
 import br.com.vitorcarvalho.order_management_api.modules.items.repositories.ItemRepository;
 
 @Service
-public class ItemUseCase {
+public class ItemService {
     private ItemRepository itemRepository;
     private ItemMapper itemMapper;
 
-    ItemUseCase(ItemRepository itemRepository, ItemMapper itemMapper){
+    ItemService(ItemRepository itemRepository, ItemMapper itemMapper) {
         this.itemRepository = itemRepository;
         this.itemMapper = itemMapper;
     }
 
-    public List<ItemEntity> findAll(){
+    public List<ItemEntity> findAll() {
         return this.itemRepository.findAll();
     }
 
-    public List<ItemEntity> findByFilter(String name, String category){
-        if(name != null){
+    public List<ItemEntity> findByFilter(String name, String category) {
+        if (name != null) {
             return this.itemRepository.findByNameContainingIgnoreCase(name.toUpperCase());
         }
-        if(category != null){
+        if (category != null) {
             return this.itemRepository.findByCategoryContainingIgnoreCase(category.toUpperCase());
         }
         return this.itemRepository.findAll();
     }
-    public ItemEntity create(CreateItemRequest createdItem){
+
+    public ItemEntity create(CreateItemRequest createdItem) {
         ItemEntity item = this.itemMapper.toEntity(createdItem);
         return this.itemRepository.save(item);
     }
 
-    public ItemEntity patch(UUID id, PatchItemRequest patchedItem){
+    public ItemEntity patch(UUID id, PatchItemRequest patchedItem) {
         ItemEntity item = itemRepository.findById(id).orElseThrow(
-            () -> new ItemNotFoundException()
-        );
+                () -> new ItemNotFoundException());
 
         itemMapper.patchEntityFromDTO(patchedItem, item);
         return itemRepository.save(item);
     }
 
-    public ItemEntity update(UUID id, UpdateItemRequest updatedItem){
+    public ItemEntity update(UUID id, UpdateItemRequest updatedItem) {
         ItemEntity item = itemRepository.findById(id).orElseThrow(
-            () -> new ItemNotFoundException()
-        );
+                () -> new ItemNotFoundException());
 
         itemMapper.updateEntityFromDTO(updatedItem, item);
         return itemRepository.save(item);
     }
 
-    public void delete(UUID id){
+    public void delete(UUID id) {
         ItemEntity item = itemRepository.findById(id).orElseThrow(
-            () -> new ItemNotFoundException()
-        );
+                () -> new ItemNotFoundException());
 
         itemRepository.delete(item);
     }

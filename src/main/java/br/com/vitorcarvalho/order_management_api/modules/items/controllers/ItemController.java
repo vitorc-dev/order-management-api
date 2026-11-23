@@ -21,57 +21,56 @@ import br.com.vitorcarvalho.order_management_api.modules.items.ItemEntity;
 import br.com.vitorcarvalho.order_management_api.modules.items.dto.CreateItemRequest;
 import br.com.vitorcarvalho.order_management_api.modules.items.dto.PatchItemRequest;
 import br.com.vitorcarvalho.order_management_api.modules.items.dto.UpdateItemRequest;
-import br.com.vitorcarvalho.order_management_api.modules.items.service.ItemUseCase;
+import br.com.vitorcarvalho.order_management_api.modules.items.service.ItemService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
-
-
-
 @RestController
 @RequestMapping("/items")
 @Tag(name = "Item", description = "Item's information")
 public class ItemController {
-    private ItemUseCase itemUseCase;
+    private ItemService itemService;
 
-    ItemController(ItemUseCase itemUseCase){
-        this.itemUseCase = itemUseCase;
+    ItemController(ItemService itemService) {
+        this.itemService = itemService;
     }
 
     @PostMapping("/")
     @PreAuthorize("hasRole('ADMIN')")
     @ApiResponses({
-        @ApiResponse(responseCode = "201", description = "The item was created with success!"),
-        @ApiResponse(responseCode = "400", description = "Please verify the item's attributes.")
+            @ApiResponse(responseCode = "201", description = "The item was created with success!"),
+            @ApiResponse(responseCode = "400", description = "Please verify the item's attributes.")
     })
     @Operation(summary = "Registration", description = "This function is responsible for recording the items.")
     public ResponseEntity<ItemEntity> create(@Valid @RequestBody CreateItemRequest createdItem) {
-        ItemEntity item = this.itemUseCase.create(createdItem);
+        ItemEntity item = this.itemService.create(createdItem);
         return ResponseEntity.status(HttpStatus.CREATED).body(item);
     }
 
     @GetMapping("")
     @Operation(summary = "List", description = "This funcion is responsible for listing the items based on a filter.")
     @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "The list was generated with success!")
+            @ApiResponse(responseCode = "200", description = "The list was generated with success!")
     })
-    public ResponseEntity<List<ItemEntity>> list(@RequestParam(required = false) String name, @RequestParam(required = false) String category) {
-        List<ItemEntity> items = itemUseCase.findByFilter(name, category);
+    public ResponseEntity<List<ItemEntity>> list(@RequestParam(required = false) String name,
+            @RequestParam(required = false) String category) {
+        List<ItemEntity> items = itemService.findByFilter(name, category);
         return ResponseEntity.ok(items);
     }
-    
+
     @PatchMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Patch", description = "This function is responsible for updating partially an item by ID.")
     @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "The item was patched with success!"),
-        @ApiResponse(responseCode = "404", description = "Please verify the ID provided.")
+            @ApiResponse(responseCode = "200", description = "The item was patched with success!"),
+            @ApiResponse(responseCode = "404", description = "Please verify the ID provided.")
     })
-    public ResponseEntity<ItemEntity> patch(@PathVariable UUID id, @Valid @RequestBody PatchItemRequest patchedItemRequest) {
-        ItemEntity patchedItem = this.itemUseCase.patch(id, patchedItemRequest);
+    public ResponseEntity<ItemEntity> patch(@PathVariable UUID id,
+            @Valid @RequestBody PatchItemRequest patchedItemRequest) {
+        ItemEntity patchedItem = this.itemService.patch(id, patchedItemRequest);
         return ResponseEntity.ok(patchedItem);
     }
 
@@ -79,11 +78,12 @@ public class ItemController {
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Update", description = "This funcion is responsible for updating an item by ID.")
     @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "The item was updated with success!"),
-        @ApiResponse(responseCode = "404", description = "Please verify the ID provided.")
+            @ApiResponse(responseCode = "200", description = "The item was updated with success!"),
+            @ApiResponse(responseCode = "404", description = "Please verify the ID provided.")
     })
-    public ResponseEntity<ItemEntity> update(@PathVariable UUID id, @Valid @RequestBody UpdateItemRequest updatedItemRequest) {
-        ItemEntity updatedItem = this.itemUseCase.update(id, updatedItemRequest);
+    public ResponseEntity<ItemEntity> update(@PathVariable UUID id,
+            @Valid @RequestBody UpdateItemRequest updatedItemRequest) {
+        ItemEntity updatedItem = this.itemService.update(id, updatedItemRequest);
         return ResponseEntity.ok(updatedItem);
     }
 
@@ -91,13 +91,12 @@ public class ItemController {
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Delete", description = "This function is responsible for deleting an item by ID.")
     @ApiResponses({
-        @ApiResponse(responseCode = "204", description = "The item was deleted with success!"),
-        @ApiResponse(responseCode = "404", description = "Please verify the ID provided.")
+            @ApiResponse(responseCode = "204", description = "The item was deleted with success!"),
+            @ApiResponse(responseCode = "404", description = "Please verify the ID provided.")
     })
-    public ResponseEntity<Void> delete(@PathVariable UUID id){
-        itemUseCase.delete(id);
+    public ResponseEntity<Void> delete(@PathVariable UUID id) {
+        itemService.delete(id);
         return ResponseEntity.noContent().build();
     }
-
 
 }
