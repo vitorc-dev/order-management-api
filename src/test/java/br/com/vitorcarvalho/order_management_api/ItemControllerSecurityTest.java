@@ -150,7 +150,7 @@ public class ItemControllerSecurityTest {
     }
 
     @Test
-    void shouldReturn200WhenAdminDeletesItem() throws Exception{
+    void shouldReturn204WhenAdminDeletesItem() throws Exception{
         String token = jwtService.generateToken("admin@email.com");
 
         mockMvc.perform(delete("/items/{id}", itemId).header("Authorization", "Bearer " + token)

@@ -91,11 +91,12 @@ public class ItemController {
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Delete", description = "This function is responsible for deleting an item by ID.")
     @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "The item was deleted with success!"),
+        @ApiResponse(responseCode = "204", description = "The item was deleted with success!"),
         @ApiResponse(responseCode = "404", description = "Please verify the ID provided.")
     })
-    public void delete(@PathVariable UUID id){
+    public ResponseEntity<Void> delete(@PathVariable UUID id){
         itemUseCase.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
 
