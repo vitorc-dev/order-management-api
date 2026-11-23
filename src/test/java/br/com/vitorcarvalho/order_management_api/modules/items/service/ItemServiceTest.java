@@ -16,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import br.com.vitorcarvalho.order_management_api.modules.exceptions.ItemNotFoundException;
 import br.com.vitorcarvalho.order_management_api.modules.items.ItemEntity;
 import br.com.vitorcarvalho.order_management_api.modules.items.dto.PatchItemRequest;
+import br.com.vitorcarvalho.order_management_api.modules.items.dto.UpdateItemRequest;
 import br.com.vitorcarvalho.order_management_api.modules.items.mappers.ItemMapper;
 import br.com.vitorcarvalho.order_management_api.modules.items.repositories.ItemRepository;
 
@@ -77,6 +78,35 @@ public class ItemServiceTest {
 
         assertThrows(ItemNotFoundException.class, () -> itemService.patch(id, dto));
         verify(itemMapper, never()).patchEntityFromDTO(any(), any());
+        verify(itemRepository, never()).save(any());
+    }
+
+    //Update
+    @Test
+    void shouldUpdateWhenItemExists(){
+        UUID id = UUID.randomUUID();
+        ItemEntity item = new ItemEntity();
+        UpdateItemRequest dto = new UpdateItemRequest();
+
+        when(itemRepository.findById(id)).thenReturn(Optional.of(item));
+        when(itemRepository.save(item)).thenReturn(item);
+
+        ItemEntity result = itemService.update(id, dto);
+
+        assertEquals(item, result);
+        verify(itemMapper).updateEntityFromDTO(dto, item);
+        verify(itemRepository).save(result);
+    }
+
+    @Test
+    void shouldThrowWhenUpdatingNonExistingItem(){
+        UUID id = UUID.randomUUID();
+        UpdateItemRequest dto = new UpdateItemRequest();
+
+        when(itemRepository.findById(id)).thenReturn(Optional.empty());
+        
+        assertThrows(ItemNotFoundException.class, () -> itemService.update(id, dto));
+        verify(itemMapper, never()).updateEntityFromDTO(any(), any());
         verify(itemRepository, never()).save(any());
     }
 }
